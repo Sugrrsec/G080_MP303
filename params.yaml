@@ -1,0 +1,30 @@
+data:
+  train_path: data/raw/train.csv
+  target: kg_per_worker
+
+features:
+  numerical:
+    - worker_exp_yr
+    - rain_mm_week
+    - slope_deg
+    - temp_c
+    - bush_age_yr
+    - hours_worked
+
+  categorical:
+    - flush
+    - section
+
+model:
+  validation_size: 0.2
+  random_state: 42
+
+  candidates:
+    - n_estimators: 100
+    - n_estimators: 200
+    - n_estimators: 300
+
+mlflow:
+  tracking_uri: sqlite:///mlflow.db
+  experiment_name: MP303_Tea_Leaf_Plucking
+  registered_model_name: mp303-tea-leaf-regressor
