@@ -1,4 +1,8 @@
 
+import json
+import logging
+import sys
+from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -12,6 +16,32 @@ from pydantic import BaseModel, ConfigDict, Field
 MODEL_PATH = Path(__file__).resolve().parents[2] / "model" / "model.pkl"
 
 model = None
+
+
+class JsonFormatter(logging.Formatter):
+    def format(self, record):
+        log_data = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "level": record.levelname,
+            "service": "mp303-api",
+            "event": record.getMessage()
+        }
+
+        if hasattr(record, "prediction"):
+            log_data["prediction"] = record.prediction
+
+        return json.dumps(log_data)
+
+
+logger = logging.getLogger("mp303.api")
+logger.setLevel(logging.INFO)
+
+if not logger.handlers:
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(JsonFormatter())
+    logger.addHandler(handler)
+
+logger.propagate = False
 
 
 class PredictionInput(BaseModel):
@@ -34,9 +64,12 @@ async def lifespan(app: FastAPI):
     with MODEL_PATH.open("rb") as file:
         model = cloudpickle.load(file)
 
+    logger.info("model_loaded")
+
     yield
 
     model = None
+    logger.info("model_unloaded")
 
 
 app = FastAPI(
@@ -54,6 +87,11 @@ def health():
 @app.post("/predict")
 def predict(data: PredictionInput):
     input_data = pd.DataFrame([data.model_dump()])
-    prediction = model.predict(input_data)[0]
+    prediction = float(model.predict(input_data)[0])
 
-    return {"prediction": float(prediction)}
+    logger.info(
+        "prediction_generated",
+        extra={"prediction": prediction}
+    )
+
+    return {"prediction": prediction}

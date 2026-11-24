@@ -32,6 +32,7 @@ graphql-core==3.2.14
 graphql-relay==3.2.0
 h11==0.16.0
 huey==3.5.4
+httpx2==2.16.2
 idna==3.20
 importlib_metadata==9.1.0
 iniconfig==2.3.1
@@ -71,7 +72,7 @@ pytest==9.2.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.4
 pytz==2026.6
-pywin32==312
+pywin32==312; sys_platform == "win32"
 PyYAML==6.0.4
 requests==2.34.2
 scikit-learn==1.9.1

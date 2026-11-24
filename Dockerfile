@@ -1,4 +1,3 @@
-
 FROM python:3.12-slim
 
 WORKDIR /app
@@ -6,9 +5,9 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-COPY docker-requirements.txt .
+COPY requirements.txt .
 
-RUN pip install --no-cache-dir -r docker-requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src ./src
 COPY model ./model
