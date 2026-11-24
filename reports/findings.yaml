@@ -1,62 +1,54 @@
-# MP303 findings --- fill in every value, keep every key.
-# The marking tool reads this file. Write null only where the comment says so.
-# Use the exact column names and group values from your data files.
-
-group_id: "G080"          # your group id, e.g. "G042"
-problem_id: "MP303"
-
+﻿group_id: G080
+problem_id: MP303
 data_issues:
-  # For each of the 7 kinds: present: true or false.
-  # If present is false, leave the other values as null.
   leaking_column:
     present: true
-    column: kg_weighed_at_factory           # the column that must not be used as a feature
+    column: kg_weighed_at_factory
   unit_mixup:
     present: false
     column: null
     group_value: null
-    factor: null           # wrong value = right value x factor
+    factor: null
   sentinel_value:
     present: true
     column: temp_c
     value: 9999.0
-    count: 46            # how many rows have it
+    count: 46
   duplicate_rows:
     present: false
-    count: null           # number of EXTRA copies (rows you would delete)
+    count: null
   stuck_sensor:
     present: false
     column: null
     start_date: null
-    end_date: null         # last date with the stuck value, YYYY-MM-DD
+    end_date: null
   target_typos:
     present: true
-    count: 8            # rows whose target was typed 10 times too big
+    count: 8
   spelling_variants:
     present: true
     column: flush
-    true_levels: 3      # how many real categories there are after cleaning
-
+    true_levels: 3
 tracking:
-  experiment_name: "MP303_Tea_Leaf_Plucking"
-  best_run_id: "PASTE_YOUR_V1_RUN_ID_HERE"
-  registered_model_name: "mp303-tea-leaf-regressor"
-  champion_version: 1
-
+  experiment_name: MP303_Tea_Leaf_Plucking
+  best_run_id: 0d907229243e411b86cc3680ce061873
+  registered_model_name: mp303-tea-leaf-regressor
+  champion_version: 2
 monitoring:
-  psi:                     # cleaned train.csv vs later.csv, 10 bins
-    worker_exp_yr: null
-    rain_mm_week: null
-    slope_deg: null
-    temp_c: null
-    bush_age_yr: null
-    hours_worked: null
-  most_drifted_feature: null
-  mae_by_group:            # v1 on later.csv, per value of section
-    'Upper Garden': null
-    'Lower Garden': null
-    'River Side': null
-  worst_served_group: null
-  mae_v1_on_check: null    # v1 on the last 30% of later.csv (by date)
-  mae_v2_on_check: null    # v2 on the same rows
-  decision: null           # promote or keep
+  psi:
+    worker_exp_yr: 3.204178960375384
+    rain_mm_week: 0.050402688196010736
+    slope_deg: 0.0485910151105023
+    temp_c: 0.01885956512418881
+    bush_age_yr: 0.027667993500398218
+    hours_worked: 0.045767328057988735
+  most_drifted_feature: worker_exp_yr
+  mae_by_group:
+    Lower Garden: 4.274943452380946
+    River Side: 18.337067632850232
+    Upper Garden: 4.329549019607846
+  worst_served_group: River Side
+  mae_v1_on_check: 7.233088888888883
+  mae_v2_on_check: 4.4985074074074065
+  decision: promote
+
